@@ -1,0 +1,48 @@
+version: '3.7'
+
+networks:
+  socialnet:
+    name: socialnet
+    external: true
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: app
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./docker_cache/mysql:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - socialnet
+
+  app:
+    build:
+      context: ./docker
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+    user: "1000:1000"
+    working_dir: /var/www/html
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - socialnet
+
+  npm:
+    image: node:14
+    entrypoint: [ 'npm' ]
+    user: "1000:1000"
+    volumes:
+      - ./:/src
+    working_dir: /src
+    environment:
+      - NODE_ENV=development
+    networks:
+      - socialnet
