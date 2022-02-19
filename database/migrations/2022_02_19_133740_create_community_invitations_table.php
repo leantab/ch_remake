@@ -15,6 +15,13 @@ return new class extends Migration
     {
         Schema::create('community_invitations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('community_id');
+            $table->foreign('community_id')->references('id')->on('communities')->onDelete('cascade');
+            $table->string('name');
+            $table->string('lastname');
+            $table->string('email');
+            $table->boolean('accepted')->nullable();
+            $table->dateTime('accepted_at')->nullable();
             $table->timestamps();
         });
     }

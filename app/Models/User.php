@@ -70,5 +70,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Game::class, 'game_users')->withTimestamps();
     }
 
+    public function get_open_matches()
+    {
+        return $this->belongsToMany(Game::class)->where('is_open', true);
+    }
+
 
 }

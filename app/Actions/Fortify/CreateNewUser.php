@@ -22,15 +22,35 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        return User::create([
+
+        $user = User::create([
             'name' => $input['name'],
+            'lastname' => $input['lastname'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
+
+        if (array_key_exists('my_locale', $input) && $input['my_locale'] != '') {
+            $user->language = $input['my_locale'];
+            $user->save();
+        }
+
+        if (array_key_exists('invitation', $input) && $input['invitation'] != '') {
+            $inv = decrypt($input['invitation']);
+            $user->acceptCommunityInvitation($inv);
+        }
+
+        if (array_key_exists('match_invitation', $input) && $input['match_invitation'] != '') {
+            $inv = decrypt($input['match_invitation']);
+            // $user->pending_match_invitation = $input['match_nvitation'];
+            $user->acceptMatchInvitation($input['match_invitation']);
+        }
+
+        return $user;
     }
 }
