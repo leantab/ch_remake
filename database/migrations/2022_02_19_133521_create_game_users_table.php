@@ -14,7 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('game_users', function (Blueprint $table) {
-            $table->id();
+            $table->primary(['user_id', 'game_id']);
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('game_id');
+            $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
+            $table->boolean('is_admin')->default(false);
             $table->timestamps();
         });
     }

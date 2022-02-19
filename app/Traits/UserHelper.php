@@ -11,7 +11,7 @@ use App\Models\GameUser;
 use Carbon\Carbon;
 
 
-class UserHelper
+trait UserHelper
 {
     public function isChAdmin()
     {

@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->foreignId('community_id');
+            $table->foreign('community_id')->references('id')->on('games')->onDelete('cascade');
             $table->timestamps();
         });
     }

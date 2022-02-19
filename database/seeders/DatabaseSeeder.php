@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Community;
-use App\Models\CommunityUser;
+use App\Models\CommunityRole;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

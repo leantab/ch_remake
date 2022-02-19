@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('game_invitations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('match_id');
+            $table->foreignId('game_id');
             $table->foreignId('community_id');
             $table->foreignId('user_id')->nullable();
             $table->string('name')->nullable();
